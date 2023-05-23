@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.Switch;
 
@@ -12,9 +13,11 @@ public class EnemySpawning : MonoBehaviour
     public GameObject EnemyPostion;
     public LayerMask RayCastLayerMask;
 
+    public int EnemyCount { get { return gameObject.transform.GetChild(0).childCount; } }
+
     private List<Vector3> _enemyPositions;
 
-    private bool _isSpawning = false;
+    private bool _parameterChanged = false;
 
     private void Start()
     {
@@ -36,32 +39,40 @@ public class EnemySpawning : MonoBehaviour
 
     public void ChangeParameters(EnemyParameter enemyParameter, int enemyPerMinute)
     {
-        if (_isSpawning)
+        if (!_parameterChanged)
         {
             StopCoroutine(ChangeParameterDelay(enemyParameter, enemyPerMinute));
         } else
         {
-            EnemyParameter = enemyParameter;
-            EnemyPerMinute = enemyPerMinute;
+            Debug.Log("Parameter allready changed");
         }
     }
     private void SpawnMinute()
     {
-        if (_isSpawning) { Debug.LogError("Spawning out of Sync"); }
-        _isSpawning = true;
         StartCoroutine(SpawnLoopCoroutine());
     }
     private void SpawnEnemy()
     {
         Vector3 position = _enemyPositions[Random.Range(0, _enemyPositions.Count)];
-        GameObject newEnemy = Instantiate(Enemy, position, Quaternion.identity);
+        GameObject newEnemy = Instantiate(Enemy, position, Quaternion.identity, gameObject.transform.GetChild(0));
         newEnemy.GetComponent<EnemyController>().EnemyParameter = EnemyParameter;
+        Debug.Log(EnemyCount);
     }
 
     IEnumerator SpawnerLoop()
     {
-        SpawnMinute();
-        yield return new WaitForSeconds(60);
+        while (true)
+        {
+            if (_parameterChanged)
+            {
+                _parameterChanged = false;
+            }
+            else
+            {
+                SpawnMinute();
+            }
+            yield return new WaitForSeconds(60);
+        }
     }
 
     IEnumerator SpawnLoopCoroutine()
@@ -73,15 +84,15 @@ public class EnemySpawning : MonoBehaviour
             yield return new WaitForSeconds(60f / EnemyPerMinute);
             spawnCount--;
         }
-
-        _isSpawning = false;
     }
     
     IEnumerator ChangeParameterDelay(EnemyParameter enemyParameter, int enemyPerMinute)
     {
-        yield return new WaitUntil(() => !_isSpawning);
+        _parameterChanged = true;
+        yield return new WaitUntil(() => !_parameterChanged);
 
         EnemyParameter = enemyParameter;
         EnemyPerMinute = enemyPerMinute;
+        SpawnMinute();
     }
 }
