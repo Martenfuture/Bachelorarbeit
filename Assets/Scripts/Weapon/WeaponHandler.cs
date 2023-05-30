@@ -16,6 +16,7 @@ public class WeaponHandler : MonoBehaviour
     private GameObject[] _weapons;
 
     private float _currentFireRate;
+    private float _currentDamage;
 
     private bool _fireHold = false;
     private bool _fired = false;
@@ -37,6 +38,7 @@ public class WeaponHandler : MonoBehaviour
         transform.GetChild(StartWeapon).gameObject.SetActive(true);
         _activeWeapon = transform.GetChild(StartWeapon).gameObject;
         _currentFireRate = _activeWeapon.GetComponent<WeapponStats>().FireRate;
+        _currentDamage = _activeWeapon.GetComponent<WeapponStats>().Damage;
     }
 
     public void FireWeapon()
@@ -53,7 +55,29 @@ public class WeaponHandler : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(child.position, child.forward, out hit, 100f, RayCastLayerMask))
         {
+            if (hit.transform.CompareTag("Enemy"))
+            {
+                GameObject parentObject = hit.transform.parent.gameObject;
+                while (parentObject.GetComponent<EnemyController>() == null)
+                {
+                    parentObject = parentObject.transform.parent.gameObject;
+                    if (parentObject == null)
+                    {
+                        Debug.LogError("Enemy not found");
+                        break;
+                    }
+                }
+                if (hit.transform.name == "HitBoxHead")
+                {
+                    parentObject.GetComponent<EnemyController>().TakeDamage(_currentDamage * 2);
+                } else
+                {
+                    parentObject.GetComponent<EnemyController>().TakeDamage(_currentDamage);
+                }
+            }
             GameObject hitEffect = Instantiate(HitEffect, hit.point, Quaternion.identity);
+            hitEffect.transform.LookAt(child.forward);
+            hitEffect.transform.localScale = hitEffect.transform.localScale * 0.25f;
             StartCoroutine(DeleteHitEffect(hitEffect));
         }
     }
@@ -102,7 +126,7 @@ public class WeaponHandler : MonoBehaviour
 
     IEnumerator DeleteHitEffect(GameObject hitEffect)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(10f);
         Destroy(hitEffect);
     }
 }

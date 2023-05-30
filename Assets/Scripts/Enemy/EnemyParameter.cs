@@ -5,6 +5,13 @@ using UnityEngine;
 public class EnemyParameter
 {
     public float Speed;
-    public int Health;
+    public float Health;
     public int Damage;
+
+    public EnemyParameter(float speed, float health, int damage)
+    {
+        Speed = speed;
+        Health = health;
+        Damage = damage;
+    }
 }

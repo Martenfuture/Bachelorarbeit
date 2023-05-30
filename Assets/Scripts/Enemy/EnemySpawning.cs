@@ -6,6 +6,7 @@ using UnityEngine.InputSystem.Switch;
 
 public class EnemySpawning : MonoBehaviour
 {
+    public static EnemySpawning instance;
     public GameObject Enemy;
     public int EnemyPerMinute = 10;
 
@@ -18,6 +19,11 @@ public class EnemySpawning : MonoBehaviour
     private List<Vector3> _enemyPositions;
 
     private bool _parameterChanged = false;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -34,6 +40,11 @@ public class EnemySpawning : MonoBehaviour
                 Debug.LogError("Enemy Position not Hit: " + child.name);
             }
         }
+        //StartCoroutine(SpawnerLoop());
+    }
+
+    public void StartSpawning()
+    {
         StartCoroutine(SpawnerLoop());
     }
 
@@ -41,7 +52,7 @@ public class EnemySpawning : MonoBehaviour
     {
         if (!_parameterChanged)
         {
-            StopCoroutine(ChangeParameterDelay(enemyParameter, enemyPerMinute));
+            StartCoroutine(ChangeParameterDelay(enemyParameter, enemyPerMinute));
         } else
         {
             Debug.Log("Parameter allready changed");
@@ -55,17 +66,18 @@ public class EnemySpawning : MonoBehaviour
     {
         Vector3 position = _enemyPositions[Random.Range(0, _enemyPositions.Count)];
         GameObject newEnemy = Instantiate(Enemy, position, Quaternion.identity, gameObject.transform.GetChild(0));
-        newEnemy.GetComponent<EnemyController>().EnemyParameter = EnemyParameter;
+        newEnemy.GetComponent<EnemyController>().SetParameter(EnemyParameter);
         Debug.Log(EnemyCount);
     }
 
-    IEnumerator SpawnerLoop()
+    public IEnumerator SpawnerLoop()
     {
         while (true)
         {
             if (_parameterChanged)
             {
                 _parameterChanged = false;
+                yield return new WaitForEndOfFrame();
             }
             else
             {
