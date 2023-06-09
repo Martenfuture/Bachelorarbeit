@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public EnemyParameter StartEnemyParameter;
     public int StartEnemyPerMinute;
 
+
+    public GameObject Camera;
+
     public float EnemySpawnDelayTime = 0.1f;
 
     public event Action OnGameStart;
@@ -22,7 +25,7 @@ public class GameManager : MonoBehaviour
     {
         SetStartValues();
         EnemySpawning.instance.ChangeParameters(StartEnemyParameter, StartEnemyPerMinute);
-        StartCoroutine(EnemySpawnDelay());
+        WaveManager.instance.WaveEnded(5);
         StartCoroutine(GameStartDelay());
     }
 
@@ -40,11 +43,5 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         StartGame();
-    }
-
-    IEnumerator EnemySpawnDelay()
-    {
-        yield return new WaitForSeconds(EnemySpawnDelayTime);
-        EnemySpawning.instance.StartSpawning();
     }
 }

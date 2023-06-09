@@ -36,12 +36,13 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _enemyParameter.Health -= damage;
-        Debug.Log("Enemy Health: " + _enemyParameter.Health);
+        //Debug.Log("Enemy Health: " + _enemyParameter.Health);
         if (_enemyParameter.Health <= 0)
         {
             GameObject destoyEffect = Instantiate(DestroyEffect, transform.position + new Vector3(0,1,0), Quaternion.identity);
+            EnemySpawning.instance.EnemyDied(destoyEffect);
+
             Destroy(gameObject);
-            StartCoroutine(DeleteDestoyEffct(destoyEffect));
         }
     }
 
@@ -49,19 +50,15 @@ public class EnemyController : MonoBehaviour
     {
         if (_enemyParameter == null)
         {
-            _enemyParameter = GameManager.instance.StartEnemyParameter;
+            EnemyParameter gameEnemyParameter = GameManager.instance.StartEnemyParameter;
+            _enemyParameter = new EnemyParameter(gameEnemyParameter.Speed, gameEnemyParameter.Health, gameEnemyParameter.Damage);
         }
     }
 
     public void SetParameter(EnemyParameter parameter)
     {
-        _enemyParameter = new EnemyParameter(parameter.Speed, parameter.Health,parameter.Damage);
-    }
-
-    IEnumerator DeleteDestoyEffct(GameObject destoyEffect)
-    {
-        yield return new WaitForSeconds(3f);
-        Destroy(destoyEffect);
+        _enemyParameter = parameter;
+        Debug.Log("Enemy Health: " + _enemyParameter.Health);
     }
 
     IEnumerator MoveToPlayer()

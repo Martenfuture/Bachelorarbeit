@@ -48,12 +48,11 @@ public class WeaponHandler : MonoBehaviour
             return;
         }
         StartCoroutine(FireDelay());
-        Transform child = _activeWeapon.transform.GetChild(0).gameObject.transform;
-        Debug.DrawLine(_activeWeapon.transform.GetChild(0).position, _activeWeapon.transform.GetChild(0).position + _activeWeapon.transform.GetChild(0).forward * 100f, Color.red, 1f, true);
+        Transform camera = GameManager.instance.Camera.transform;
 
 
         RaycastHit hit;
-        if (Physics.Raycast(child.position, child.forward, out hit, 100f, RayCastLayerMask))
+        if (Physics.Raycast(camera.position, camera.forward, out hit, 100f, RayCastLayerMask))
         {
             if (hit.transform.CompareTag("Enemy"))
             {
@@ -75,8 +74,11 @@ public class WeaponHandler : MonoBehaviour
                     parentObject.GetComponent<EnemyController>().TakeDamage(_currentDamage);
                 }
             }
+
+            Debug.DrawLine(_activeWeapon.transform.GetChild(0).position, hit.point, Color.red, 1f, true);
+
             GameObject hitEffect = Instantiate(HitEffect, hit.point, Quaternion.identity);
-            hitEffect.transform.LookAt(child.forward);
+            hitEffect.transform.LookAt(camera.forward);
             hitEffect.transform.localScale = hitEffect.transform.localScale * 0.25f;
             StartCoroutine(DeleteHitEffect(hitEffect));
         }

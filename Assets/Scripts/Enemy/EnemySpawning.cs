@@ -10,6 +10,8 @@ public class EnemySpawning : MonoBehaviour
     public GameObject Enemy;
     public int EnemyPerMinute = 10;
 
+    public int EnemyWaveRemaining;
+
     public EnemyParameter EnemyParameter;
     public GameObject EnemyPostion;
     public LayerMask RayCastLayerMask;
@@ -17,6 +19,8 @@ public class EnemySpawning : MonoBehaviour
     public int EnemyCount { get { return gameObject.transform.GetChild(0).childCount; } }
 
     private List<Vector3> _enemyPositions;
+
+    public int EnemysAlive;
 
     private bool _parameterChanged = false;
 
@@ -45,6 +49,7 @@ public class EnemySpawning : MonoBehaviour
 
     public void StartSpawning()
     {
+        EnemysAlive = EnemyWaveRemaining;
         StartCoroutine(SpawnerLoop());
     }
 
@@ -66,13 +71,28 @@ public class EnemySpawning : MonoBehaviour
     {
         Vector3 position = _enemyPositions[Random.Range(0, _enemyPositions.Count)];
         GameObject newEnemy = Instantiate(Enemy, position, Quaternion.identity, gameObject.transform.GetChild(0));
-        newEnemy.GetComponent<EnemyController>().SetParameter(EnemyParameter);
-        Debug.Log(EnemyCount);
+
+        EnemyParameter newEnemyParameter = new EnemyParameter(EnemyParameter.Speed, EnemyParameter.Health, EnemyParameter.Damage);
+        newEnemy.GetComponent<EnemyController>().SetParameter(newEnemyParameter);
+        Debug.Log("Enemy Count: " + EnemyCount);
+        EnemyWaveRemaining--;
+    }
+
+    public void EnemyDied(GameObject destroyEffect)
+    {
+        EnemysAlive--;
+        UIHandler.instance.UpdateUIEnemy(EnemysAlive);
+        StartCoroutine(DeleteDestoyEffctDelay(destroyEffect));
+
+        if (EnemysAlive <= 0)
+        {
+            WaveManager.instance.WaveEnded(15);
+        }
     }
 
     public IEnumerator SpawnerLoop()
     {
-        while (true)
+        while (EnemyWaveRemaining > 0)
         {
             if (_parameterChanged)
             {
@@ -90,7 +110,7 @@ public class EnemySpawning : MonoBehaviour
     IEnumerator SpawnLoopCoroutine()
     {
         int spawnCount = EnemyPerMinute;
-        while (spawnCount > 0)
+        while (spawnCount > 0 && EnemyWaveRemaining > 0)
         {
             SpawnEnemy();
             yield return new WaitForSeconds(60f / EnemyPerMinute);
@@ -106,5 +126,10 @@ public class EnemySpawning : MonoBehaviour
         EnemyParameter = enemyParameter;
         EnemyPerMinute = enemyPerMinute;
         SpawnMinute();
+    }
+    IEnumerator DeleteDestoyEffctDelay(GameObject destoyEffect)
+    {
+        yield return new WaitForSeconds(3f);
+        Destroy(destoyEffect);
     }
 }
