@@ -9,7 +9,8 @@ public class WeaponHandler : MonoBehaviour
     public static WeaponHandler instance;
     public int StartWeapon = 0;
 
-    public GameObject HitEffect;
+    public GameObject HitEffectBlood;
+    public GameObject HitEffectWall;
 
     private GameObject _activeWeapon;
     private GameObject[] _weapons;
@@ -55,8 +56,10 @@ public class WeaponHandler : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(camera.position, camera.forward, out hit, 100f, _rayCastLayerMask))
         {
+            string hitType = "Wall";
             if (hit.transform.CompareTag("Enemy"))
             {
+                hitType = "Enemy";
                 GameObject parentObject = hit.transform.parent.gameObject;
                 while (parentObject.GetComponent<EnemyController>() == null)
                 {
@@ -75,10 +78,17 @@ public class WeaponHandler : MonoBehaviour
                     parentObject.GetComponent<EnemyController>().TakeDamage(_currentDamage);
                 }
             }
-
+            GameObject hitEffect = null;
+            switch (hitType)
+            {
+                case "Wall":
+                    hitEffect = Instantiate(HitEffectWall, hit.point, Quaternion.identity);
+                    break;
+                case "Enemy":
+                    hitEffect = Instantiate(HitEffectBlood, hit.point, Quaternion.identity);
+                    break;
+            }
             Debug.DrawLine(_activeWeapon.transform.GetChild(0).position, hit.point, Color.red, 1f, true);
-
-            GameObject hitEffect = Instantiate(HitEffect, hit.point, Quaternion.identity);
             hitEffect.transform.LookAt(camera.forward);
             hitEffect.transform.localScale = hitEffect.transform.localScale * 0.25f;
             StartCoroutine(DeleteHitEffect(hitEffect));

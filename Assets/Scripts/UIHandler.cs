@@ -53,6 +53,7 @@ public class UIHandler : MonoBehaviour
 
     IEnumerator NextWaveCountdownDelay(int seconds)
     {
+        yield return new WaitForEndOfFrame();
         NextWaveUI.transform.parent.gameObject.SetActive(true);
         while (seconds > 0)
         {

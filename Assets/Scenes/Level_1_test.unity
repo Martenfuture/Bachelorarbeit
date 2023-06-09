@@ -3736,7 +3736,7 @@ PrefabInstance:
     - target: {fileID: 2302903264308014506, guid: 9e9d5f7841d002e42a2b20db99851206,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.12327194
+      value: -3.9
       objectReference: {fileID: 0}
     - target: {fileID: 2302903264308014506, guid: 9e9d5f7841d002e42a2b20db99851206,
         type: 3}
@@ -3746,7 +3746,7 @@ PrefabInstance:
     - target: {fileID: 2302903264308014506, guid: 9e9d5f7841d002e42a2b20db99851206,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.5376835
+      value: 16.8
       objectReference: {fileID: 0}
     - target: {fileID: 2302903264308014506, guid: 9e9d5f7841d002e42a2b20db99851206,
         type: 3}
@@ -3909,6 +3909,17 @@ PrefabInstance:
     - target: {fileID: 2774727886457521347, guid: 2d3a85ecde41a8246a79669975912b74,
         type: 3}
       propertyPath: HitEffect
+      value: 
+      objectReference: {fileID: 194062, guid: e901d2f5f930a264793339e78f054599, type: 3}
+    - target: {fileID: 2774727886457521347, guid: 2d3a85ecde41a8246a79669975912b74,
+        type: 3}
+      propertyPath: HitEffectWall
+      value: 
+      objectReference: {fileID: 4322476972507951130, guid: ab090fb251a37434ea1b3d434f654d87,
+        type: 3}
+    - target: {fileID: 2774727886457521347, guid: 2d3a85ecde41a8246a79669975912b74,
+        type: 3}
+      propertyPath: HitEffectBlood
       value: 
       objectReference: {fileID: 194062, guid: e901d2f5f930a264793339e78f054599, type: 3}
     - target: {fileID: 2774727886457521347, guid: 2d3a85ecde41a8246a79669975912b74,
