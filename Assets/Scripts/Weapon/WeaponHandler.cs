@@ -9,12 +9,12 @@ public class WeaponHandler : MonoBehaviour
     public static WeaponHandler instance;
     public int StartWeapon = 0;
 
-    public LayerMask RayCastLayerMask;
     public GameObject HitEffect;
 
     private GameObject _activeWeapon;
     private GameObject[] _weapons;
 
+    private LayerMask _rayCastLayerMask;
     private float _currentFireRate;
     private float _currentDamage;
 
@@ -28,6 +28,7 @@ public class WeaponHandler : MonoBehaviour
 
     private void Start()
     {
+        _rayCastLayerMask = GameManager.instance.ShootingLayerMask;
         _weapons = new GameObject[transform.childCount];
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -52,7 +53,7 @@ public class WeaponHandler : MonoBehaviour
 
 
         RaycastHit hit;
-        if (Physics.Raycast(camera.position, camera.forward, out hit, 100f, RayCastLayerMask))
+        if (Physics.Raycast(camera.position, camera.forward, out hit, 100f, _rayCastLayerMask))
         {
             if (hit.transform.CompareTag("Enemy"))
             {

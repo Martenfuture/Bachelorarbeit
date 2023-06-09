@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
     public PlayerInputActions PlayerControls;
 
+    public int Health = 100;
+
     private InputAction _fire;
     private InputAction _fireHold;
     private void Awake()
@@ -35,6 +37,17 @@ public class PlayerController : MonoBehaviour
     {
         _fire.Disable();
         _fireHold.Disable();
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        UIHandler.instance.UpdateUIHealth(Health, false);
+        Debug.Log("Player Health: " + Health);
+        if (Health <= 0)
+        {
+            Debug.Log("Player Died");
+        }
     }
 
     private void FireSingle(InputAction.CallbackContext context)

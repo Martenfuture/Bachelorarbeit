@@ -14,9 +14,12 @@ public class EnemyController : MonoBehaviour
     public GameObject DestroyEffect;
 
     public bool Hunting = true;
+    private bool _firing = false;
+    private LayerMask _rayCastLayerMask;
 
     private void Start()
     {
+        _rayCastLayerMask = GameManager.instance.ShootingLayerMask;
         GameManager.instance.OnGameStart += OnGameStart;
         _animator = gameObject.GetComponent<Animator>();
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
@@ -26,6 +29,23 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         UpdateAnimation();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") && !_firing)
+        {
+            _firing = true;
+            StartCoroutine(FiringLoop());
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            _firing = false;
+        }
     }
 
     private void UpdateAnimation()
@@ -46,6 +66,34 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void FireOnPlayer()
+    {
+        float distance = Vector3.Distance(transform.position, PlayerController.instance.transform.position);
+        float hitChance = 0.5f - (distance / GetComponent<SphereCollider>().radius * 0.3f);
+
+        Vector3 direction = (PlayerController.instance.transform.position - transform.GetChild(2).position).normalized;
+        Debug.DrawRay(transform.GetChild(2).position, direction * 10, Color.green, 1f);
+        if (IsHit(hitChance))
+        {
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.GetChild(2).position, (PlayerController.instance.transform.position - transform.GetChild(2).position).normalized, out hit, 100f, _rayCastLayerMask) && !hit.transform.CompareTag("Player"))
+            {
+                // Effect needed
+            }
+            else
+            {
+                PlayerController.instance.TakeDamage(_enemyParameter.Damage);
+            }
+        }
+    }
+
+    private bool IsHit(float hitChance)
+    {
+        float randomValue = Random.Range(0f, 1f);
+        return randomValue <= hitChance;
+    }
+
     private void OnGameStart()
     {
         if (_enemyParameter == null)
@@ -59,6 +107,15 @@ public class EnemyController : MonoBehaviour
     {
         _enemyParameter = parameter;
         Debug.Log("Enemy Health: " + _enemyParameter.Health);
+    }
+
+    IEnumerator FiringLoop()
+    {
+        while (_firing)
+        {
+            FireOnPlayer();
+            yield return new WaitForSeconds(2f);
+        }
     }
 
     IEnumerator MoveToPlayer()

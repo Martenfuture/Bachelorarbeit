@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public EnemyParameter StartEnemyParameter;
     public int StartEnemyPerMinute;
 
+    public LayerMask ShootingLayerMask;
+
 
     public GameObject Camera;
 
