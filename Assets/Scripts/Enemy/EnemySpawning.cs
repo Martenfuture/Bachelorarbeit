@@ -58,19 +58,33 @@ public class EnemySpawning : MonoBehaviour
         StartCoroutine(SpawnerLoop());
     }
 
-    public void ChangeParameters(EnemyParameter enemyParameter, int enemyPerMinute)
+    public IEnumerator SpawnerLoop()
     {
-        if (!_parameterChanged)
+        while (EnemyWaveRemaining > 0)
         {
-            StartCoroutine(ChangeParameterDelay(enemyParameter, enemyPerMinute));
-        } else
-        {
-            Debug.Log("Parameter allready changed");
+            if (_parameterChanged)
+            {
+                _parameterChanged = false;
+                yield return new WaitForSeconds(0.1f);
+            }
+            SpawnMinute();
+            yield return new WaitForSeconds(60);
         }
     }
     private void SpawnMinute()
     {
         StartCoroutine(SpawnLoopCoroutine());
+    }
+
+    IEnumerator SpawnLoopCoroutine()
+    {
+        int spawnCount = EnemyPerMinute;
+        while (spawnCount > 0 && EnemyWaveRemaining > 0)
+        {
+            SpawnEnemy();
+            yield return new WaitForSeconds(60f / EnemyPerMinute);
+            spawnCount--;
+        }
     }
     private void SpawnEnemy()
     {
@@ -81,6 +95,17 @@ public class EnemySpawning : MonoBehaviour
         newEnemy.GetComponent<EnemyController>().SetParameter(newEnemyParameter);
         Debug.Log("Enemy Count: " + EnemyCount);
         EnemyWaveRemaining--;
+    }
+
+    public void ChangeParameters(EnemyParameter enemyParameter, int enemyPerMinute)
+    {
+        if (!_parameterChanged)
+        {
+            StartCoroutine(ChangeParameterDelay(enemyParameter, enemyPerMinute));
+        } else
+        {
+            Debug.Log("Parameter allready changed");
+        }
     }
 
     public void EnemyDied(GameObject destroyEffect)
@@ -108,34 +133,6 @@ public class EnemySpawning : MonoBehaviour
         UIHandler.instance.UpdateUIVariable("EnemyDamage", newEnemyParameter.Damage.ToString());
         UIHandler.instance.UpdateUIVariable("EnemiesPerMinute", Mathf.RoundToInt(diffícultySetting.EnemiesPerMinuteMultiplier * _startEnemyPerMinute).ToString());
     }
-
-    public IEnumerator SpawnerLoop()
-    {
-        while (EnemyWaveRemaining > 0)
-        {
-            if (_parameterChanged)
-            {
-                _parameterChanged = false;
-                yield return new WaitForEndOfFrame();
-            }
-            else
-            {
-                SpawnMinute();
-            }
-            yield return new WaitForSeconds(60);
-        }
-    }
-
-    IEnumerator SpawnLoopCoroutine()
-    {
-        int spawnCount = EnemyPerMinute;
-        while (spawnCount > 0 && EnemyWaveRemaining > 0)
-        {
-            SpawnEnemy();
-            yield return new WaitForSeconds(60f / EnemyPerMinute);
-            spawnCount--;
-        }
-    }
     
     IEnumerator ChangeParameterDelay(EnemyParameter enemyParameter, int enemyPerMinute)
     {
@@ -144,7 +141,6 @@ public class EnemySpawning : MonoBehaviour
 
         EnemyParameter = enemyParameter;
         EnemyPerMinute = enemyPerMinute;
-        SpawnMinute();
     }
     IEnumerator DeleteDestoyEffctDelay(GameObject destoyEffect)
     {

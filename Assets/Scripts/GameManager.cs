@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public EnemyParameter StartEnemyParameter;
+    public EnemyParameter StartEnemyParameter = new EnemyParameter(1f, 100f, 10);
     public int StartEnemyPerMinute;
 
     public LayerMask ShootingLayerMask;
@@ -29,14 +29,12 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SetStartValues();
-        EnemySpawning.instance.ChangeParameters(StartEnemyParameter, StartEnemyPerMinute);
         WaveManager.instance.WaveEnded(5);
         StartCoroutine(GameStartDelay());
     }
 
     private void SetStartValues()
     {
-        StartEnemyParameter = new EnemyParameter(1f, 100f, 10);
     }
 
     public void StartGame()
@@ -46,13 +44,19 @@ public class GameManager : MonoBehaviour
 
     public void ChangeDifficulty(DifficultySetting diffícultySetting)
     {
-        OnDifficultyChange?.Invoke(diffícultySetting);
-        CurrentDifficultySettings = diffícultySetting;
+        StartCoroutine(ChangeDifficultyDelay(diffícultySetting));
     }
 
     IEnumerator GameStartDelay()
     {
         yield return new WaitForSeconds(0.1f);
         StartGame();
+    }
+
+    IEnumerator ChangeDifficultyDelay(DifficultySetting diffícultySetting)
+    {
+        yield return new WaitForEndOfFrame();
+        OnDifficultyChange?.Invoke(diffícultySetting);
+        CurrentDifficultySettings = diffícultySetting;
     }
 }

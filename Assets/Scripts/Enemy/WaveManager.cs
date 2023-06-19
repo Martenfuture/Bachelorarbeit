@@ -18,6 +18,7 @@ public class WaveManager : MonoBehaviour
     private void Start()
     {
         GameManager.instance.OnDifficultyChange += ChangeDifficulty;
+        _enemiesPerWave = StartEnemiesPerWave;
     }
     public void StartWave()
     {
@@ -32,6 +33,10 @@ public class WaveManager : MonoBehaviour
     public void WaveEnded(int restartDelay)
     {
         UIHandler.instance.NextWaveCountdown(restartDelay);
+        float difficulltyMultiplier = GameManager.instance.gameObject.GetComponent<ExponentialDifficulty>().GetDifficultyMultiplier(WaveNumber);
+        DifficultySetting difficultySetting = new DifficultySetting(difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier);
+        Debug.Log(difficulltyMultiplier);
+        GameManager.instance.ChangeDifficulty(difficultySetting);
     }
 
     private void ChangeDifficulty(DifficultySetting diffícultySetting)
