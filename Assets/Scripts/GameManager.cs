@@ -17,7 +17,10 @@ public class GameManager : MonoBehaviour
 
     public float EnemySpawnDelayTime = 0.1f;
 
+    public DifficultySetting CurrentDifficultySettings;
+
     public event Action OnGameStart;
+    public event Action<DifficultySetting> OnDifficultyChange;
 
     private void Awake()
     {
@@ -39,6 +42,12 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         OnGameStart?.Invoke();
+    }
+
+    public void ChangeDifficulty(DifficultySetting diffícultySetting)
+    {
+        OnDifficultyChange?.Invoke(diffícultySetting);
+        CurrentDifficultySettings = diffícultySetting;
     }
 
     IEnumerator GameStartDelay()

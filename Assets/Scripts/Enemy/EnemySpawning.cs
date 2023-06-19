@@ -9,10 +9,12 @@ public class EnemySpawning : MonoBehaviour
     public static EnemySpawning instance;
     public GameObject Enemy;
     public int EnemyPerMinute = 10;
+    private int _startEnemyPerMinute;
 
     public int EnemyWaveRemaining;
 
     public EnemyParameter EnemyParameter;
+    private EnemyParameter _startEnemyParameter;
     public GameObject EnemyPostion;
     public LayerMask RayCastLayerMask;
 
@@ -31,6 +33,7 @@ public class EnemySpawning : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.OnDifficultyChange += ChangeDifficulty;
         _enemyPositions = new List<Vector3>();
         foreach (Transform child in EnemyPostion.transform)
         {
@@ -45,6 +48,8 @@ public class EnemySpawning : MonoBehaviour
             }
         }
         //StartCoroutine(SpawnerLoop());
+        _startEnemyParameter = GameManager.instance.StartEnemyParameter;
+        _startEnemyPerMinute = GameManager.instance.StartEnemyPerMinute;
     }
 
     public void StartSpawning()
@@ -88,6 +93,20 @@ public class EnemySpawning : MonoBehaviour
         {
             WaveManager.instance.WaveEnded(15);
         }
+    }
+
+    private void ChangeDifficulty(DifficultySetting diffícultySetting)
+    {
+        EnemyParameter newEnemyParameter = new EnemyParameter(
+            diffícultySetting.EnemySpeedMultiplier * _startEnemyParameter.Speed, 
+            diffícultySetting.EnemyHealthMultiplier * _startEnemyParameter.Health, 
+            Mathf.RoundToInt(diffícultySetting.EnemyDamageMultiplier * _startEnemyParameter.Damage)
+            );
+        StartCoroutine(ChangeParameterDelay(newEnemyParameter, Mathf.RoundToInt(diffícultySetting.EnemiesPerMinuteMultiplier * _startEnemyPerMinute)));
+        UIHandler.instance.UpdateUIVariable("EnemySpeed", newEnemyParameter.Speed.ToString());
+        UIHandler.instance.UpdateUIVariable("EnemyHealth", newEnemyParameter.Health.ToString());
+        UIHandler.instance.UpdateUIVariable("EnemyDamage", newEnemyParameter.Damage.ToString());
+        UIHandler.instance.UpdateUIVariable("EnemiesPerMinute", Mathf.RoundToInt(diffícultySetting.EnemiesPerMinuteMultiplier * _startEnemyPerMinute).ToString());
     }
 
     public IEnumerator SpawnerLoop()

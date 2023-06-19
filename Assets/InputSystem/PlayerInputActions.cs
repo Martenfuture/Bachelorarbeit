@@ -44,6 +44,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleVariableUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""7d8ad16d-51c4-4762-ab30-1b808263ae0c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -66,6 +75,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FireHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""507bf722-f592-4593-b61c-8d77b05cf257"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleVariableUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -126,6 +146,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_FireHold = m_Player.FindAction("FireHold", throwIfNotFound: true);
+        m_Player_ToggleVariableUI = m_Player.FindAction("ToggleVariableUI", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -187,12 +208,14 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_FireHold;
+    private readonly InputAction m_Player_ToggleVariableUI;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @FireHold => m_Wrapper.m_Player_FireHold;
+        public InputAction @ToggleVariableUI => m_Wrapper.m_Player_ToggleVariableUI;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -208,6 +231,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @FireHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireHold;
                 @FireHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireHold;
                 @FireHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireHold;
+                @ToggleVariableUI.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleVariableUI;
+                @ToggleVariableUI.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleVariableUI;
+                @ToggleVariableUI.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleVariableUI;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -218,6 +244,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @FireHold.started += instance.OnFireHold;
                 @FireHold.performed += instance.OnFireHold;
                 @FireHold.canceled += instance.OnFireHold;
+                @ToggleVariableUI.started += instance.OnToggleVariableUI;
+                @ToggleVariableUI.performed += instance.OnToggleVariableUI;
+                @ToggleVariableUI.canceled += instance.OnToggleVariableUI;
             }
         }
     }
@@ -262,5 +291,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     {
         void OnFire(InputAction.CallbackContext context);
         void OnFireHold(InputAction.CallbackContext context);
+        void OnToggleVariableUI(InputAction.CallbackContext context);
     }
 }

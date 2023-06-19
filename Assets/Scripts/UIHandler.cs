@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIHandler : MonoBehaviour
@@ -14,6 +15,19 @@ public class UIHandler : MonoBehaviour
     public GameObject HealthBarUI;
     public GameObject DamageGradientUI;
 
+    // Variable UI
+    [Header("Variable UIs")]
+    [SerializeField] GameObject VariableUI;
+
+    [SerializeField] TextMeshProUGUI _varPlayerHealthUI;
+    [SerializeField] TextMeshProUGUI _varEnemiesPerMinuteUI;
+    [SerializeField] TextMeshProUGUI _varEnemiesPerWaveUI;
+    [SerializeField] TextMeshProUGUI _varEnemySpeedUI;
+    [SerializeField] TextMeshProUGUI _varEnemyHealthUI;
+    [SerializeField] TextMeshProUGUI _varEnemyDamageUI;
+    [SerializeField] TextMeshProUGUI _varWeaponDammageUI;
+    [SerializeField] TextMeshProUGUI _varWeaponFireRateUI;
+
     private TextMeshProUGUI _waveText;
     private TextMeshProUGUI _enemyText;
     private TextMeshProUGUI _nextWaveText;
@@ -22,9 +36,21 @@ public class UIHandler : MonoBehaviour
     private float _healthBarWidth;
 
 
+    public PlayerInputActions PlayerControls;
+    private InputAction _toggleVariableUI;
+
+
     private void Awake()
     {
         instance = this;
+        PlayerControls = new PlayerInputActions();
+    }
+
+    private void OnEnable()
+    {
+        _toggleVariableUI = PlayerControls.Player.ToggleVariableUI;
+        _toggleVariableUI.Enable();
+        _toggleVariableUI.performed += ToggleVariableUI;
     }
 
     private void Start()
@@ -107,5 +133,42 @@ public class UIHandler : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+    }
+
+    public void UpdateUIVariable(string variableType, string variable)
+    {
+        switch (variableType)
+        {
+            case "PlayerHealth":
+                _varPlayerHealthUI.text = variable;
+                break;
+            case "EnemiesPerMinute":
+                _varEnemiesPerMinuteUI.text = variable;
+                break;
+            case "EnemiesPerWave":
+                _varEnemiesPerWaveUI.text = variable;
+                break;
+            case "EnemySpeed":
+                _varEnemySpeedUI.text = variable;
+                break;
+            case "EnemyHealth":
+                _varEnemyHealthUI.text = variable;
+                break;
+            case "EnemyDamage":
+                _varEnemyDamageUI.text = variable;
+                break;
+            case "WeaponDamage":
+                _varWeaponDammageUI.text = variable;
+                break;
+            case "WeaponFireRate":
+                _varWeaponFireRateUI.text = variable;
+                break;
+        }
+    }
+
+
+    private void ToggleVariableUI(InputAction.CallbackContext obj)
+    {
+        VariableUI.SetActive(!VariableUI.activeSelf);
     }
 }

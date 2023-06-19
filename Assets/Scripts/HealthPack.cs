@@ -12,11 +12,12 @@ public class HealthPack : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             int playerHealth = PlayerController.instance.Health;
-            if (playerHealth >= 100)
+            int playerMaxHealth = PlayerController.instance.MaxHealth;
+            if (playerHealth >= playerMaxHealth)
             {
                 return;
             }
-            PlayerController.instance.Health = Mathf.Min(playerHealth + HealhAmount, 100);
+            PlayerController.instance.Health = Mathf.Min(playerHealth + HealhAmount, playerMaxHealth);
             UIHandler.instance.UpdateUIHealth(PlayerController.instance.Health, true);
 
             Destroy(gameObject);

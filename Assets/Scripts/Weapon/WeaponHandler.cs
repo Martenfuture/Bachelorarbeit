@@ -19,6 +19,7 @@ public class WeaponHandler : MonoBehaviour
     private float _currentFireRate;
     private float _currentDamage;
 
+
     private bool _fireHold = false;
     private bool _fired = false;
 
@@ -118,6 +119,15 @@ public class WeaponHandler : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private void ChangeDifficulty(DifficultySetting difficultySettings)
+    {
+        _currentFireRate = _activeWeapon.GetComponent<WeapponStats>().FireRate * difficultySettings.WeaponFirerateMultiplier;
+        _currentDamage = _activeWeapon.GetComponent<WeapponStats>().Damage * difficultySettings.WeaponDamageMultiplier;
+
+        UIHandler.instance.UpdateUIVariable("WeaponDamage", _currentDamage.ToString());
+        UIHandler.instance.UpdateUIVariable("WeaponFireRate", _currentFireRate.ToString());
     }
 
     IEnumerator FireHold()

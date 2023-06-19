@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public PlayerInputActions PlayerControls;
 
     public int Health = 100;
+    public int MaxHealth = 100;
+    private int _startMaxHealth = 100;
 
     private InputAction _fire;
     private InputAction _fireHold;
@@ -18,6 +20,11 @@ public class PlayerController : MonoBehaviour
     {
         instance = this;
         PlayerControls = new PlayerInputActions();
+    }
+
+    private void Start()
+    {
+        GameManager.instance.OnDifficultyChange += ChangeDifficulty;
     }
 
     private void OnEnable()
@@ -48,6 +55,12 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Player Died");
         }
+    }
+
+    private void ChangeDifficulty(DifficultySetting difficultySettings)
+    {
+        MaxHealth = Mathf.RoundToInt(difficultySettings.PlayerHealthMultiplier * _startMaxHealth);
+        UIHandler.instance.UpdateUIVariable("PlayerHealth", MaxHealth.ToString());
     }
 
     private void FireSingle(InputAction.CallbackContext context)
