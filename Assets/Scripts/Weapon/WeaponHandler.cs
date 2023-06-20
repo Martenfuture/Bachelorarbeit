@@ -11,6 +11,8 @@ public class WeaponHandler : MonoBehaviour
 
     public GameObject HitEffectBlood;
     public GameObject HitEffectWall;
+    public GameObject BulletEffect;
+    public GameObject MuzzleEffect;
 
     private GameObject _activeWeapon;
     private GameObject[] _weapons;
@@ -55,7 +57,7 @@ public class WeaponHandler : MonoBehaviour
 
 
         RaycastHit hit;
-        if (Physics.Raycast(camera.position, camera.forward, out hit, 100f, _rayCastLayerMask))
+        if (Physics.Raycast(camera.position, camera.forward, out hit, Mathf.Infinity, _rayCastLayerMask))
         {
             string hitType = "Wall";
             if (hit.transform.CompareTag("Enemy"))
@@ -83,15 +85,20 @@ public class WeaponHandler : MonoBehaviour
             switch (hitType)
             {
                 case "Wall":
-                    hitEffect = Instantiate(HitEffectWall, hit.point, Quaternion.identity);
+                    hitEffect = Instantiate(HitEffectWall, hit.point, Quaternion.FromToRotation(Vector3.forward, hit.normal));
                     break;
                 case "Enemy":
                     hitEffect = Instantiate(HitEffectBlood, hit.point, Quaternion.identity);
+                    hitEffect.transform.LookAt(camera.forward);
+                    hitEffect.transform.localScale = hitEffect.transform.localScale * 0.25f;
                     break;
             }
+            GameObject bulletEffect = Instantiate(BulletEffect, _activeWeapon.transform.GetChild(0).position, Quaternion.identity);
+            bulletEffect.transform.LookAt(hit.point);
+            GameObject muzzleEffect = Instantiate(MuzzleEffect, _activeWeapon.transform.GetChild(0).position, Quaternion.identity, _activeWeapon.transform.GetChild(0));
+            muzzleEffect.transform.LookAt(hit.point);
+
             Debug.DrawLine(_activeWeapon.transform.GetChild(0).position, hit.point, Color.red, 1f, true);
-            hitEffect.transform.LookAt(camera.forward);
-            hitEffect.transform.localScale = hitEffect.transform.localScale * 0.25f;
             StartCoroutine(DeleteHitEffect(hitEffect));
         }
     }

@@ -7,10 +7,13 @@ public class HealthPack : MonoBehaviour
 {
 
     public int HealhAmount = 30;
+
+    private bool _isPickedUp = false;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !_isPickedUp)
         {
+            _isPickedUp = true;
             int playerHealth = PlayerController.instance.Health;
             int playerMaxHealth = PlayerController.instance.MaxHealth;
             if (playerHealth >= playerMaxHealth)
@@ -20,7 +23,17 @@ public class HealthPack : MonoBehaviour
             PlayerController.instance.Health = Mathf.Min(playerHealth + HealhAmount, playerMaxHealth);
             UIHandler.instance.UpdateUIHealth(PlayerController.instance.Health, true);
 
-            Destroy(gameObject);
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+            StartCoroutine(ReactivateDelay());
         }
+    }
+
+    IEnumerator ReactivateDelay()
+    {
+        yield return new WaitForSeconds(10);
+
+        _isPickedUp = false;
+        gameObject.GetComponent<MeshRenderer>().enabled = true;
     }
 }

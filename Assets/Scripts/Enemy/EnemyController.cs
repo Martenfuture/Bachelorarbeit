@@ -17,12 +17,18 @@ public class EnemyController : MonoBehaviour
     private bool _firing = false;
     private LayerMask _rayCastLayerMask;
 
+    private int _maxHealth;
+    private Material _material;
+
     private void Start()
     {
         _rayCastLayerMask = GameManager.instance.ShootingLayerMask;
         GameManager.instance.OnGameStart += OnGameStart;
         _animator = gameObject.GetComponent<Animator>();
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+
+        _maxHealth = (int) _enemyParameter.Health;
+        _material = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material;
         StartCoroutine(MoveToPlayer());
     }
 
@@ -56,6 +62,8 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _enemyParameter.Health -= damage;
+        float healthRatio = _enemyParameter.Health / _maxHealth;
+        _material.color = new Color(1, healthRatio, healthRatio);
         //Debug.Log("Enemy Health: " + _enemyParameter.Health);
         if (_enemyParameter.Health <= 0)
         {
@@ -86,6 +94,9 @@ public class EnemyController : MonoBehaviour
                 PlayerController.instance.TakeDamage(_enemyParameter.Damage);
             }
         }
+
+        GameObject muzzleEffect = Instantiate(WeaponHandler.instance.MuzzleEffect, transform.GetChild(2).GetChild(0).position, Quaternion.identity, transform.GetChild(2).GetChild(0));
+        muzzleEffect.transform.LookAt(transform.GetChild(2).GetChild(0).forward);
     }
 
     private bool IsHit(float hitChance)

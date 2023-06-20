@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public LayerMask ShootingLayerMask;
 
+    public bool ExponentialDifficultyType;
+
 
     public GameObject Camera;
 

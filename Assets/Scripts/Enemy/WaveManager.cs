@@ -34,8 +34,16 @@ public class WaveManager : MonoBehaviour
     {
         UIHandler.instance.NextWaveCountdown(restartDelay);
         float difficulltyMultiplier = GameManager.instance.gameObject.GetComponent<ExponentialDifficulty>().GetDifficultyMultiplier(WaveNumber);
-        DifficultySetting difficultySetting = new DifficultySetting(difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier);
-        Debug.Log(difficulltyMultiplier);
+        DifficultySetting difficultySetting = null;
+        if (GameManager.instance.ExponentialDifficultyType)
+        {
+            difficulltyMultiplier = GameManager.instance.gameObject.GetComponent<ExponentialDifficulty>().GetDifficultyMultiplier(WaveNumber);
+            difficultySetting = new DifficultySetting(difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier);
+        }
+        else
+        {
+            //DDA
+        }
         GameManager.instance.ChangeDifficulty(difficultySetting);
     }
 
