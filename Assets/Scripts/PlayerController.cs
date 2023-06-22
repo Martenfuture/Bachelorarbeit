@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player Health: " + Health);
         if (Health <= 0)
         {
+            GameManager.instance.PlayerDied();
             Debug.Log("Player Died");
         }
     }

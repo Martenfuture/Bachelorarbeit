@@ -21,6 +21,8 @@ public class WeaponHandler : MonoBehaviour
     private float _currentFireRate;
     private float _currentDamage;
 
+    private bool _isGameOver = false;
+
 
     private bool _fireHold = false;
     private bool _fired = false;
@@ -40,6 +42,9 @@ public class WeaponHandler : MonoBehaviour
             transform.GetChild(i).gameObject.SetActive(false);
         }
 
+        GameManager.instance.OnGameOver += GameOver;
+        GameManager.instance.OnDifficultyChange += ChangeDifficulty;
+
         transform.GetChild(StartWeapon).gameObject.SetActive(true);
         _activeWeapon = transform.GetChild(StartWeapon).gameObject;
         _currentFireRate = _activeWeapon.GetComponent<WeapponStats>().FireRate;
@@ -48,7 +53,7 @@ public class WeaponHandler : MonoBehaviour
 
     public void FireWeapon()
     {
-        if (_fired && !_fireHold)
+        if ((_fired && !_fireHold) || _isGameOver)
         {
             return;
         }
@@ -105,6 +110,10 @@ public class WeaponHandler : MonoBehaviour
 
     public void FireWeaponHold()
     {
+        if (_isGameOver)
+        {
+            return;
+        }
         _fireHold = true;
         StartCoroutine(FireHold());
     }
@@ -158,5 +167,11 @@ public class WeaponHandler : MonoBehaviour
     {
         yield return new WaitForSeconds(10f);
         Destroy(hitEffect);
+    }
+
+    private void GameOver()
+    {
+        _isGameOver = true;
+        _activeWeapon.SetActive(false);
     }
 }

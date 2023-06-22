@@ -15,6 +15,9 @@ public class UIHandler : MonoBehaviour
     public GameObject HealthBarUI;
     public GameObject DamageGradientUI;
 
+    [SerializeField] private GameObject _gameOverUI;
+    private bool _isGameOver = false;
+
     // Variable UI
     [Header("Variable UIs")]
     [SerializeField] GameObject VariableUI;
@@ -55,6 +58,7 @@ public class UIHandler : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.OnGameOver += GameOver;
         _waveText = WaveUI.GetComponent<TextMeshProUGUI>();
         _enemyText = EnemyUI.GetComponent<TextMeshProUGUI>();
         _nextWaveText = NextWaveUI.GetComponent<TextMeshProUGUI>();
@@ -103,6 +107,10 @@ public class UIHandler : MonoBehaviour
 
     public void UpdateUIHealth(float health, bool positiv)
     {
+        if (_isGameOver)
+        {
+            return;
+        }
         StartCoroutine(DamageGradient(positiv));
         _healthBarText.text = health.ToString();
 
@@ -170,5 +178,11 @@ public class UIHandler : MonoBehaviour
     private void ToggleVariableUI(InputAction.CallbackContext obj)
     {
         VariableUI.SetActive(!VariableUI.activeSelf);
+    }
+
+    private void GameOver()
+    {
+        _isGameOver = true;
+        _gameOverUI.SetActive(true);
     }
 }
