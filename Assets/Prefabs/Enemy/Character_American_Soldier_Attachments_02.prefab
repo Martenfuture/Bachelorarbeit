@@ -2603,6 +2603,7 @@ GameObject:
   - component: {fileID: 2211780662358586104}
   - component: {fileID: 2658149188931704902}
   - component: {fileID: 3910443719767199963}
+  - component: {fileID: 8321140727302430025}
   - component: {fileID: 151339222562222160}
   - component: {fileID: 8364803871346779593}
   m_Layer: 2
@@ -2688,6 +2689,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DestroyEffect: {fileID: 180128, guid: 6586ff0f14125534cae2f5d8f04b7871, type: 3}
   Hunting: 1
+--- !u!114 &8321140727302430025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2297939335768541952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49a0cb5abf1d0384bb2cce544606cce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &151339222562222160
 MonoBehaviour:
   m_ObjectHideFlags: 0

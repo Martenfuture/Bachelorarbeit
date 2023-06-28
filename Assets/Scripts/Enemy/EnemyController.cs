@@ -8,9 +8,6 @@ public class EnemyController : MonoBehaviour
 {
     private EnemyParameter _enemyParameter;
 
-    private Animator _animator;
-    private NavMeshAgent _navMeshAgent;
-
     public GameObject DestroyEffect;
 
     public bool Hunting = true;
@@ -24,17 +21,10 @@ public class EnemyController : MonoBehaviour
     {
         _rayCastLayerMask = GameManager.instance.ShootingLayerMask;
         GameManager.instance.OnGameStart += OnGameStart;
-        _animator = gameObject.GetComponent<Animator>();
-        _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
         _maxHealth = (int) _enemyParameter.Health;
         _material = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material;
         StartCoroutine(MoveToPlayer());
-    }
-
-    private void Update()
-    {
-        UpdateAnimation();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,11 +42,6 @@ public class EnemyController : MonoBehaviour
         {
             _firing = false;
         }
-    }
-
-    private void UpdateAnimation()
-    {
-        _animator.SetFloat("Speed", _navMeshAgent.velocity.magnitude);
     }
 
     public void TakeDamage(float damage)
