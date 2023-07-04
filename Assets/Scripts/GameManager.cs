@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
 
     public LayerMask ShootingLayerMask;
 
-    public bool ExponentialDifficultyType;
+    public int DifficultyType;
 
 
     public GameObject Camera;
@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         PlayerControls = new PlayerInputActions();
+        DifficultyType = PlayerPrefs.GetInt("DifficultyType");
     }
     private void Start()
     {

@@ -40,12 +40,15 @@ public class WaveManager : MonoBehaviour
         UIHandler.instance.NextWaveCountdown(restartDelay);
         float difficulltyMultiplier = GameManager.instance.gameObject.GetComponent<ExponentialDifficulty>().GetDifficultyMultiplier(WaveNumber);
         DifficultySetting difficultySetting = null;
-        if (GameManager.instance.ExponentialDifficultyType)
+
+        int difficultyType = GameManager.instance.DifficultyType;
+        if (difficultyType == 0)
         {
+            UIHandler.instance.UpdateUIVariable("HamletScore", "NA");
             difficulltyMultiplier = GameManager.instance.gameObject.GetComponent<ExponentialDifficulty>().GetDifficultyMultiplier(WaveNumber);
             difficultySetting = new DifficultySetting(1, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier);
         }
-        else
+        else if (difficultyType == 1)
         {
             difficultySetting = GameManager.instance.gameObject.GetComponent<HamletSystem>().GetHamletDifficultySetting(WaveNumber);
         }

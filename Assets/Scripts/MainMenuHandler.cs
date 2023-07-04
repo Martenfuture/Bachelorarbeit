@@ -25,8 +25,9 @@ public class MainMenuHandler : MonoBehaviour
         _creditsMenuPost.SetActive(false);
     }
 
-    public void StartGame()
+    public void StartGame(int difficultyType)
     {
+        PlayerPrefs.SetInt("DifficultyType", difficultyType);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
