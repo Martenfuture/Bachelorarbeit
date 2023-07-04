@@ -5,14 +5,7 @@ using UnityEngine.Rendering;
 
 public class DifficultyTesting : MonoBehaviour
 {
-    public float PlayerHealthMultiplier;
-    public float EnemiesPerMinuteMultiplier;
-    public float EnemiesPerWaveMultiplier;
-    public float EnemySpeedMultiplier;
-    public float EnemyHealthMultiplier;
-    public float EnemyDamageMultiplier;
-    public float WeaponDamageMultiplier;
-    public float WeaponFirerateMultiplier;
+    public int Wave;
 
     [Header("Exponential Difficulty")]
     public int ExponentialBaseDifficulty;
@@ -26,9 +19,7 @@ public class DifficultyTesting : MonoBehaviour
 
     private void Update()
     {
-        float difficulltyMultiplier = exponentialDifficulty.GetDifficultyMultiplier(ExponentialBaseDifficulty);
-        DifficultySetting difficultySetting = new DifficultySetting(difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier);
-        GameManager.instance.ChangeDifficulty(difficultySetting);
+        GameManager.instance.ChangeDifficulty(GetComponent<HamletSystem>().GetHamletDifficultySetting(Wave));
     }
 
 

@@ -102,7 +102,7 @@ public class EnemyController : MonoBehaviour
     public void SetParameter(EnemyParameter parameter)
     {
         _enemyParameter = parameter;
-        Debug.Log("Enemy Health: " + _enemyParameter.Health);
+        _maxHealth = (int) _enemyParameter.Health;
     }
 
     IEnumerator FiringLoop()

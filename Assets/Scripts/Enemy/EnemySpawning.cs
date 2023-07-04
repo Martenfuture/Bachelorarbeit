@@ -26,6 +26,9 @@ public class EnemySpawning : MonoBehaviour
 
     private bool _parameterChanged = false;
 
+    //Kill Counter
+    private int _killCount = 0;
+
     private void Awake()
     {
         instance = this;
@@ -93,7 +96,6 @@ public class EnemySpawning : MonoBehaviour
 
         EnemyParameter newEnemyParameter = new EnemyParameter(EnemyParameter.Speed, EnemyParameter.Health, EnemyParameter.Damage);
         newEnemy.GetComponent<EnemyController>().SetParameter(newEnemyParameter);
-        Debug.Log("Enemy Count: " + EnemyCount);
         EnemyWaveRemaining--;
     }
 
@@ -113,7 +115,7 @@ public class EnemySpawning : MonoBehaviour
         EnemysAlive--;
         UIHandler.instance.UpdateUIEnemy(EnemysAlive);
         StartCoroutine(DeleteDestoyEffctDelay(destroyEffect));
-
+        _killCount++;
         if (EnemysAlive <= 0)
         {
             WaveManager.instance.WaveEnded(15);
@@ -123,12 +125,12 @@ public class EnemySpawning : MonoBehaviour
     private void ChangeDifficulty(DifficultySetting diffícultySetting)
     {
         EnemyParameter newEnemyParameter = new EnemyParameter(
-            diffícultySetting.EnemySpeedMultiplier * _startEnemyParameter.Speed, 
-            diffícultySetting.EnemyHealthMultiplier * _startEnemyParameter.Health, 
+            diffícultySetting.EnemySpeedMultiplier * _startEnemyParameter.Speed,
+           _startEnemyParameter.Health * (1.0f + (diffícultySetting.EnemyHealthMultiplier - 1) * 0.5f),
             Mathf.RoundToInt(diffícultySetting.EnemyDamageMultiplier * _startEnemyParameter.Damage)
             );
         StartCoroutine(ChangeParameterDelay(newEnemyParameter, Mathf.RoundToInt(diffícultySetting.EnemiesPerMinuteMultiplier * _startEnemyPerMinute)));
-        UIHandler.instance.UpdateUIVariable("EnemySpeed", newEnemyParameter.Speed.ToString());
+        //UIHandler.instance.UpdateUIVariable("EnemySpeed", newEnemyParameter.Speed.ToString());
         UIHandler.instance.UpdateUIVariable("EnemyHealth", newEnemyParameter.Health.ToString());
         UIHandler.instance.UpdateUIVariable("EnemyDamage", newEnemyParameter.Damage.ToString());
         UIHandler.instance.UpdateUIVariable("EnemiesPerMinute", Mathf.RoundToInt(diffícultySetting.EnemiesPerMinuteMultiplier * _startEnemyPerMinute).ToString());
@@ -146,5 +148,12 @@ public class EnemySpawning : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         Destroy(destoyEffect);
+    }
+
+    public float GetKillsPerMinute()
+    {
+        float killsPerMinute = _killCount / ((float)WaveManager.instance.WaveTime / 60);
+        _killCount = 0;
+        return killsPerMinute;
     }
 }

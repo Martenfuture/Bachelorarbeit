@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController instance;
     public PlayerInputActions PlayerControls;
+    public int ReseavedDamge;
 
     public int Health = 100;
     public int MaxHealth = 100;
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         Health -= damage;
+        ReseavedDamge += damage;
         UIHandler.instance.UpdateUIHealth(Health, false);
         Debug.Log("Player Health: " + Health);
         if (Health <= 0)
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour
 
     private void ChangeDifficulty(DifficultySetting difficultySettings)
     {
-        MaxHealth = Mathf.RoundToInt(difficultySettings.PlayerHealthMultiplier * _startMaxHealth);
+        MaxHealth = Mathf.RoundToInt(_startMaxHealth / difficultySettings.PlayerHealthMultiplier);
         UIHandler.instance.UpdateUIVariable("PlayerHealth", MaxHealth.ToString());
     }
 

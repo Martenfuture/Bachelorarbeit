@@ -27,6 +27,9 @@ public class WeaponHandler : MonoBehaviour
     private bool _fireHold = false;
     private bool _fired = false;
 
+    private int _shootCount = 0;
+    private int _hitCount = 0;
+
     private void Awake()
     {
         instance = this;
@@ -59,7 +62,7 @@ public class WeaponHandler : MonoBehaviour
         }
         StartCoroutine(FireDelay());
         Transform camera = GameManager.instance.Camera.transform;
-
+        _shootCount++;
 
         RaycastHit hit;
         if (Physics.Raycast(camera.position, camera.forward, out hit, Mathf.Infinity, _rayCastLayerMask))
@@ -78,6 +81,7 @@ public class WeaponHandler : MonoBehaviour
                         break;
                     }
                 }
+                _hitCount++;
                 if (hit.transform.name == "HitBoxHead")
                 {
                     parentObject.GetComponent<EnemyController>().TakeDamage(_currentDamage * 2);
@@ -139,12 +143,20 @@ public class WeaponHandler : MonoBehaviour
 
     private void ChangeDifficulty(DifficultySetting difficultySettings)
     {
-        _currentFireRate = _activeWeapon.GetComponent<WeapponStats>().FireRate * difficultySettings.WeaponFirerateMultiplier;
-        _currentDamage = _activeWeapon.GetComponent<WeapponStats>().Damage * difficultySettings.WeaponDamageMultiplier;
+        _currentFireRate = _activeWeapon.GetComponent<WeapponStats>().FireRate / difficultySettings.WeaponFirerateMultiplier;
+        _currentDamage = _activeWeapon.GetComponent<WeapponStats>().Damage / difficultySettings.WeaponDamageMultiplier;
 
         UIHandler.instance.UpdateUIVariable("WeaponDamage", _currentDamage.ToString());
         UIHandler.instance.UpdateUIVariable("WeaponFireRate", _currentFireRate.ToString());
     }
+
+    public float GetAccuracy()
+    {
+        float accuracy = (float)_hitCount / (float)_shootCount;
+        _hitCount = 0;
+        _shootCount = 0;
+        return accuracy;
+    }   
 
     IEnumerator FireHold()
     {

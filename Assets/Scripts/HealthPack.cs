@@ -13,7 +13,6 @@ public class HealthPack : MonoBehaviour
     {
         if (other.CompareTag("Player") && !_isPickedUp)
         {
-            _isPickedUp = true;
             int playerHealth = PlayerController.instance.Health;
             int playerMaxHealth = PlayerController.instance.MaxHealth;
             if (playerHealth >= playerMaxHealth)
@@ -25,6 +24,7 @@ public class HealthPack : MonoBehaviour
 
             gameObject.GetComponent<MeshRenderer>().enabled = false;
 
+            _isPickedUp = true;
             StartCoroutine(ReactivateDelay());
         }
     }

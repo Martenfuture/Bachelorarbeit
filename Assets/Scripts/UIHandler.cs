@@ -122,7 +122,7 @@ public class UIHandler : MonoBehaviour
         Image image = DamageGradientUI.GetComponent<Image>();
 
         float alpha = 0.1f;
-        float valueChange = 0.05f;
+        float valueChange = 0.025f;
 
         Color targetColor = positive ? new Color(0, 1, 0, 0) : new Color(1, 0, 0, 0);
 
