@@ -30,6 +30,8 @@ public class UIHandler : MonoBehaviour
     [SerializeField] TextMeshProUGUI _varEnemyDamageUI;
     [SerializeField] TextMeshProUGUI _varWeaponDammageUI;
     [SerializeField] TextMeshProUGUI _varWeaponFireRateUI;
+    [SerializeField] TextMeshProUGUI _varHamletScoreUI;
+    [SerializeField] TextMeshProUGUI _varDifficultyMultiUI;
 
     private TextMeshProUGUI _waveText;
     private TextMeshProUGUI _enemyText;
@@ -157,7 +159,7 @@ public class UIHandler : MonoBehaviour
                 _varEnemiesPerWaveUI.text = variable;
                 break;
             case "EnemySpeed":
-                _varEnemySpeedUI.text = variable;
+                //_varEnemySpeedUI.text = variable;
                 break;
             case "EnemyHealth":
                 _varEnemyHealthUI.text = variable;
@@ -170,6 +172,12 @@ public class UIHandler : MonoBehaviour
                 break;
             case "WeaponFireRate":
                 _varWeaponFireRateUI.text = variable;
+                break;
+            case "HamletScore":
+                _varHamletScoreUI.text = variable;
+                break;
+            case "DifficultyMultiplier":
+                _varDifficultyMultiUI.text = variable;
                 break;
         }
     }

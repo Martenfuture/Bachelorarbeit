@@ -120,7 +120,7 @@ public class EnemyController : MonoBehaviour
         {
             yield return new WaitForSeconds(0.5f);
 
-            if (Hunting) gameObject.GetComponent<NavMeshAgent>().SetDestination(PlayerController.instance.transform.position);
+            if (Hunting && gameObject.activeSelf) GetComponent<NavMeshAgent>().SetDestination(PlayerController.instance.transform.position);
         }
     }
 }

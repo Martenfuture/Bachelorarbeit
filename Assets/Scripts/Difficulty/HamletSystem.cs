@@ -52,6 +52,8 @@ public class HamletSystem : MonoBehaviour
         float hamletScore = CalculateHamletScore();
         float waveFloat = (float)wave / 10f + 1;
         float difficultyMultiplier = hamletScore * waveFloat;
+        UIHandler.instance.UpdateUIVariable("HamletScore", hamletScore.ToString());
+        UIHandler.instance.UpdateUIVariable("DifficultyMultiplier", difficultyMultiplier.ToString());
         Debug.Log("DifficultyMultiplier: " + difficultyMultiplier);
         return new DifficultySetting(difficultyMultiplier, difficultyMultiplier, difficultyMultiplier, difficultyMultiplier, difficultyMultiplier, difficultyMultiplier, difficultyMultiplier, difficultyMultiplier);
     }
