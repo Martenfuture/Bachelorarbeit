@@ -1,8 +1,10 @@
+using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIHandler : MonoBehaviour
@@ -14,6 +16,8 @@ public class UIHandler : MonoBehaviour
     public GameObject NextWaveUI;
     public GameObject HealthBarUI;
     public GameObject DamageGradientUI;
+    public GameObject EscMenuUI;
+    public GameObject EscMenuPost;
 
     [SerializeField] private GameObject _gameOverUI;
     private bool _isGameOver = false;
@@ -43,6 +47,7 @@ public class UIHandler : MonoBehaviour
 
     public PlayerInputActions PlayerControls;
     private InputAction _toggleVariableUI;
+    private InputAction _toggleEscUI;
 
 
     private void Awake()
@@ -56,6 +61,10 @@ public class UIHandler : MonoBehaviour
         _toggleVariableUI = PlayerControls.Player.ToggleVariableUI;
         _toggleVariableUI.Enable();
         _toggleVariableUI.performed += ToggleVariableUI;
+
+        _toggleEscUI = PlayerControls.Player.ToggleEscUI;
+        _toggleEscUI.Enable();
+        _toggleEscUI.performed += ToggleEscMenu;
     }
 
     private void Start()
@@ -66,6 +75,9 @@ public class UIHandler : MonoBehaviour
         _nextWaveText = NextWaveUI.GetComponent<TextMeshProUGUI>();
         _healthBarText = HealthBarUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         _healthBarWidth = HealthBarUI.GetComponent<RectTransform>().rect.width;
+
+        EscMenuPost.SetActive(false);
+        EscMenuUI.SetActive(false);
     }
 
     public void UpdateUIWave(int waveNumber)
@@ -192,5 +204,39 @@ public class UIHandler : MonoBehaviour
     {
         _isGameOver = true;
         _gameOverUI.SetActive(true);
+    }
+
+    private void ToggleEscMenu(InputAction.CallbackContext obj)
+    {
+        bool active = EscMenuUI.activeSelf;
+        WaveUI.SetActive(active);
+        EnemyUI.SetActive(active);
+        NextWaveUI.SetActive(active);
+        HealthBarUI.SetActive(active);
+        VariableUI.SetActive(active);
+
+        PlayerController.instance.GetComponent<StarterAssetsInputs>().cursorLocked = active;
+        PlayerController.instance.GetComponent<StarterAssetsInputs>().cursorInputForLook = active;
+
+        Cursor.visible = !active;
+        Cursor.lockState = active ? CursorLockMode.Locked : CursorLockMode.None;
+
+
+        if (!active)
+        {
+            Time.timeScale = 0;
+        } else
+        {
+            Time.timeScale = 1;
+        }
+
+        EscMenuPost.SetActive(!active);
+        EscMenuUI.SetActive(!active);
+    }
+
+    public void ToMainMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -39,6 +40,9 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
+
         SetStartValues();
         WaveManager.instance.WaveEnded(5);
         StartCoroutine(GameStartDelay());

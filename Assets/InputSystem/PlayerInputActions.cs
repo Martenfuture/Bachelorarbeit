@@ -55,6 +55,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ToggleEscUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""54b0e908-5880-4685-baae-379f0254fe88"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Space"",
                     ""type"": ""Button"",
                     ""id"": ""3e839fee-b475-4d5d-888d-3b2abab614b4"",
@@ -106,6 +115,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afdcdecd-1e87-403b-b7be-2d00e3e155d1"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleEscUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -167,6 +187,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_FireHold = m_Player.FindAction("FireHold", throwIfNotFound: true);
         m_Player_ToggleVariableUI = m_Player.FindAction("ToggleVariableUI", throwIfNotFound: true);
+        m_Player_ToggleEscUI = m_Player.FindAction("ToggleEscUI", throwIfNotFound: true);
         m_Player_Space = m_Player.FindAction("Space", throwIfNotFound: true);
     }
 
@@ -230,6 +251,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_FireHold;
     private readonly InputAction m_Player_ToggleVariableUI;
+    private readonly InputAction m_Player_ToggleEscUI;
     private readonly InputAction m_Player_Space;
     public struct PlayerActions
     {
@@ -238,6 +260,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @FireHold => m_Wrapper.m_Player_FireHold;
         public InputAction @ToggleVariableUI => m_Wrapper.m_Player_ToggleVariableUI;
+        public InputAction @ToggleEscUI => m_Wrapper.m_Player_ToggleEscUI;
         public InputAction @Space => m_Wrapper.m_Player_Space;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -257,6 +280,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ToggleVariableUI.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleVariableUI;
                 @ToggleVariableUI.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleVariableUI;
                 @ToggleVariableUI.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleVariableUI;
+                @ToggleEscUI.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleEscUI;
+                @ToggleEscUI.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleEscUI;
+                @ToggleEscUI.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleEscUI;
                 @Space.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpace;
                 @Space.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpace;
                 @Space.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSpace;
@@ -273,6 +299,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @ToggleVariableUI.started += instance.OnToggleVariableUI;
                 @ToggleVariableUI.performed += instance.OnToggleVariableUI;
                 @ToggleVariableUI.canceled += instance.OnToggleVariableUI;
+                @ToggleEscUI.started += instance.OnToggleEscUI;
+                @ToggleEscUI.performed += instance.OnToggleEscUI;
+                @ToggleEscUI.canceled += instance.OnToggleEscUI;
                 @Space.started += instance.OnSpace;
                 @Space.performed += instance.OnSpace;
                 @Space.canceled += instance.OnSpace;
@@ -321,6 +350,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnFireHold(InputAction.CallbackContext context);
         void OnToggleVariableUI(InputAction.CallbackContext context);
+        void OnToggleEscUI(InputAction.CallbackContext context);
         void OnSpace(InputAction.CallbackContext context);
     }
 }
