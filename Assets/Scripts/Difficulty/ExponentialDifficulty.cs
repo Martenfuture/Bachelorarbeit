@@ -10,7 +10,7 @@ public class ExponentialDifficulty : MonoBehaviour
     public float GetDifficultyMultiplier(int wave)
     {
         float difficultyMultiplier = _baseDifficulty * Mathf.Pow(_difficultyIncreasePerWave, wave);
-        UIHandler.instance.UpdateUIVariable("DifficultyMultiplier", difficultyMultiplier.ToString());
+        UIHandler.instance.UpdateUIVariable("DifficultyMultiplier", (Mathf.Round(difficultyMultiplier * 100) / 100).ToString());
         return difficultyMultiplier;
     }
 }

@@ -46,7 +46,7 @@ public class WaveManager : MonoBehaviour
         {
             UIHandler.instance.UpdateUIVariable("HamletScore", "NA");
             difficulltyMultiplier = GameManager.instance.gameObject.GetComponent<ExponentialDifficulty>().GetDifficultyMultiplier(WaveNumber);
-            difficultySetting = new DifficultySetting(1, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier);
+            difficultySetting = new DifficultySetting(difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier, difficulltyMultiplier);
         }
         else if (difficultyType == 1)
         {
@@ -58,7 +58,7 @@ public class WaveManager : MonoBehaviour
     private void ChangeDifficulty(DifficultySetting diffícultySetting)
     {
         _enemiesPerWave = Mathf.RoundToInt(StartEnemiesPerWave * diffícultySetting.EnemiesPerWaveMultiplier * 1.5f);
-        UIHandler.instance.UpdateUIVariable("EnemiesPerWave", _enemiesPerWave.ToString());
+        UIHandler.instance.UpdateUIVariable("EnemiesPerWave", (Mathf.Round(_enemiesPerWave * 100) / 100).ToString());
     }
 
     IEnumerator WaveTimer()

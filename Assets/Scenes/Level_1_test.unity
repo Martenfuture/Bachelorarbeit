@@ -10132,7 +10132,27 @@ PrefabInstance:
     - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
         type: 3}
       propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.6084906
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.6084906
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4288388095
       objectReference: {fileID: 0}
     - target: {fileID: 6562693305789997821, guid: a22141f3584be1a49aea4b8ffc1d437e,
         type: 3}
@@ -11727,7 +11747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseDifficulty: 1
-  _difficultyIncreasePerWave: 1.5
+  _difficultyIncreasePerWave: 1.25
 --- !u!114 &1578233880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12134,7 +12154,27 @@ PrefabInstance:
     - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
         type: 3}
       propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.6084906
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.6084906
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2899618829943534944, guid: a22141f3584be1a49aea4b8ffc1d437e,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4288388095
       objectReference: {fileID: 0}
     - target: {fileID: 3067282629206640584, guid: a22141f3584be1a49aea4b8ffc1d437e,
         type: 3}

@@ -62,8 +62,8 @@ public class PlayerController : MonoBehaviour
 
     private void ChangeDifficulty(DifficultySetting difficultySettings)
     {
-        MaxHealth = Mathf.RoundToInt(_startMaxHealth * (1.0f + (difficultySettings.PlayerHealthMultiplier - 1) * 0.5f));
-        UIHandler.instance.UpdateUIVariable("PlayerHealth", MaxHealth.ToString());
+        MaxHealth = Mathf.RoundToInt(_startMaxHealth / (1.0f + (difficultySettings.PlayerHealthMultiplier - 1) * 0.5f));
+        UIHandler.instance.UpdateUIVariable("PlayerHealth", (Mathf.Round(MaxHealth * 100) / 100).ToString());
     }
 
     private void FireSingle(InputAction.CallbackContext context)

@@ -146,8 +146,8 @@ public class WeaponHandler : MonoBehaviour
         _currentFireRate = _activeWeapon.GetComponent<WeapponStats>().FireRate / difficultySettings.WeaponFirerateMultiplier;
         _currentDamage = _activeWeapon.GetComponent<WeapponStats>().Damage / difficultySettings.WeaponDamageMultiplier;
 
-        UIHandler.instance.UpdateUIVariable("WeaponDamage", _currentDamage.ToString());
-        UIHandler.instance.UpdateUIVariable("WeaponFireRate", _currentFireRate.ToString());
+        UIHandler.instance.UpdateUIVariable("WeaponDamage", (Mathf.Round(_currentDamage * 100) / 100).ToString());
+        UIHandler.instance.UpdateUIVariable("WeaponFireRate", (Mathf.Round(_currentFireRate * 100) / 100).ToString());
     }
 
     public float GetAccuracy()

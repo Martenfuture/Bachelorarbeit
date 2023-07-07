@@ -131,8 +131,8 @@ public class EnemySpawning : MonoBehaviour
             );
         StartCoroutine(ChangeParameterDelay(newEnemyParameter, Mathf.RoundToInt(diffícultySetting.EnemiesPerMinuteMultiplier * _startEnemyPerMinute * 1.25f)));
         //UIHandler.instance.UpdateUIVariable("EnemySpeed", newEnemyParameter.Speed.ToString());
-        UIHandler.instance.UpdateUIVariable("EnemyHealth", newEnemyParameter.Health.ToString());
-        UIHandler.instance.UpdateUIVariable("EnemyDamage", newEnemyParameter.Damage.ToString());
+        UIHandler.instance.UpdateUIVariable("EnemyHealth", (Mathf.Round(newEnemyParameter.Health * 100) / 100).ToString());
+        UIHandler.instance.UpdateUIVariable("EnemyDamage", (Mathf.Round(newEnemyParameter.Damage * 100) / 100).ToString());
         UIHandler.instance.UpdateUIVariable("EnemiesPerMinute", Mathf.RoundToInt(diffícultySetting.EnemiesPerMinuteMultiplier * _startEnemyPerMinute).ToString());
     }
     
